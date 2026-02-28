@@ -39,7 +39,6 @@ def embed_and_store(chunks):
     vectorstore = Chroma.from_documents(
         documents=chunks,
         embedding=embeddings,
-        persist_directory="chroma_db"
     )
     return vectorstore
 
@@ -92,11 +91,6 @@ if uploaded_file and st.session_state.chain is None:
         temp_path = f"temp_{uploaded_file.name}"
         with open(temp_path, "wb") as f:
             f.write(uploaded_file.read())
-
-        # Clear old ChromaDB if exists
-        import shutil
-        if os.path.exists("chroma_db"):
-            shutil.rmtree("chroma_db")
 
         chunks = load_and_chunk(temp_path)
         vectorstore = embed_and_store(chunks)
